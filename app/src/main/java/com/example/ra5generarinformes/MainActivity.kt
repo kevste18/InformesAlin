@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity() {
             val ofertasFiltradas = filtrarOfertasPorCiudad(ciudadSeleccionada)
             mostrarResultado(ciudadSeleccionada, ofertasFiltradas)
             contenedorInforme.post {
-                abrirSelectorParaGuardarPdf()
+                abrirSelectorParaGuardarPdf(ciudadSeleccionada)
             }
         }
 
@@ -195,11 +195,11 @@ class MainActivity : AppCompatActivity() {
         textoCantidadAlicante.text = ofertasAlicante.toString()
     }
 
-    private fun abrirSelectorParaGuardarPdf() {
+    private fun abrirSelectorParaGuardarPdf(ciudad: String) {
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
         intent.type = "application/pdf"
-        intent.putExtra(Intent.EXTRA_TITLE, "informe_ofertas.pdf")
+        intent.putExtra(Intent.EXTRA_TITLE, "informe_$ciudad.pdf")
         startActivityForResult(intent, codigoCrearPdf)
     }
 
