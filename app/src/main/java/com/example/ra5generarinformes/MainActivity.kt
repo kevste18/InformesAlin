@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import org.json.JSONArray
+
 class MainActivity : AppCompatActivity() {
     private lateinit var botonGenerarInforme: Button
     private lateinit var botonExportarPdf: Button
@@ -114,6 +115,11 @@ class MainActivity : AppCompatActivity() {
         return resultado
     }
 
+    private fun formatearSalario(salario: Int): String {
+        return "%,d".format(salario).replace(",", ".") + " €"
+    }
+
+
     private fun mostrarResultado(ciudad: String, ofertasFiltradas: List<Oferta>) {
         val numeroOfertas = ofertasFiltradas.size
         val salarioTotal = ofertasFiltradas.sumOf { it.salario }
@@ -123,5 +129,24 @@ class MainActivity : AppCompatActivity() {
             0.0
         }
         val salarioMaximo = ofertasFiltradas.maxOfOrNull { it.salario } ?: 0
+
+        contenedorOfertas.removeAllViews()
+
+        textoCiudadSeleccionada.text = "Ciudad seleccionada: $ciudad"
+        textoNumeroOfertas.text = "Numero de ofertas: $numeroOfertas"
+        textoSalarioTotal.text = "Salario total: ${formatearSalario(salarioTotal)}"
+        textoSalarioMedio.text = "Salario medio: ${formatearSalario(salarioMedio.toInt())}"
+        textoSalarioMaximo.text = "Salario maximo: ${formatearSalario(salarioMaximo)}"
+
+        ofertasFiltradas.forEachIndexed { indice, oferta ->
+            val textoOferta = TextView(this)
+            textoOferta.text = "${indice + 1}. ${oferta.puesto}\n" +
+                    "${oferta.empresa} · ${oferta.ciudad} · " +
+                    formatearSalario(oferta.salario)
+            textoOferta.textSize = 16f
+            textoOferta.setPadding(0, 0, 0, 24)
+            contenedorOfertas.addView(textoOferta)
+        }
+
     }
 }
