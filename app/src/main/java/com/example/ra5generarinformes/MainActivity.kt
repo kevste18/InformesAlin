@@ -1,6 +1,7 @@
 package com.example.ra5generarinformes
 
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -57,5 +58,20 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        configurarSpinner()
+    }
+
+    private fun configurarSpinner() {
+        val ciudades = arrayOf("Todas", "Valencia", "Madrid", "Alicante")
+        val adaptador = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item,
+            ciudades
+        )
+        adaptador.setDropDownViewResource(
+            android.R.layout.simple_spinner_dropdown_item
+        )
+        spinnerCiudad.adapter = adaptador
     }
 }
