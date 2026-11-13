@@ -12,25 +12,25 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import org.json.JSONArray
-
-private lateinit var spinnerCiudad: Spinner
-private lateinit var botonGenerarInforme: Button
-private lateinit var botonExportarPdf: Button
-private lateinit var contenedorInforme: LinearLayout
-private lateinit var textoCiudadSeleccionada: TextView
-private lateinit var textoNumeroOfertas: TextView
-private lateinit var textoSalarioTotal: TextView
-private lateinit var textoSalarioMedio: TextView
-private lateinit var textoSalarioMaximo: TextView
-private lateinit var barraValencia: ProgressBar
-private lateinit var barraMadrid: ProgressBar
-private lateinit var barraAlicante: ProgressBar
-private lateinit var textoCantidadValencia: TextView
-private lateinit var textoCantidadMadrid: TextView
-private lateinit var textoCantidadAlicante: TextView
-private lateinit var contenedorOfertas: LinearLayout
-private val ofertas = ArrayList<Oferta>()
 class MainActivity : AppCompatActivity() {
+    private lateinit var botonGenerarInforme: Button
+    private lateinit var botonExportarPdf: Button
+    private lateinit var contenedorInforme: LinearLayout
+    private lateinit var textoCiudadSeleccionada: TextView
+    private lateinit var textoNumeroOfertas: TextView
+    private lateinit var textoSalarioTotal: TextView
+    private lateinit var textoSalarioMedio: TextView
+    private lateinit var textoSalarioMaximo: TextView
+    private lateinit var barraValencia: ProgressBar
+    private lateinit var barraMadrid: ProgressBar
+    private lateinit var barraAlicante: ProgressBar
+    private lateinit var textoCantidadValencia: TextView
+    private lateinit var textoCantidadMadrid: TextView
+    private lateinit var textoCantidadAlicante: TextView
+    private lateinit var contenedorOfertas: LinearLayout
+    private lateinit var spinnerCiudad: Spinner
+    private val ofertas = ArrayList<Oferta>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -62,6 +62,12 @@ class MainActivity : AppCompatActivity() {
         configurarSpinner()
 
         ofertas.addAll(cargarOfertas())
+
+        botonGenerarInforme.setOnClickListener {
+            val ciudadSeleccionada = spinnerCiudad.selectedItem.toString()
+            val ofertasFiltradas = filtrarOfertasPorCiudad(ciudadSeleccionada)
+            mostrarResultado(ciudadSeleccionada, ofertasFiltradas)
+        }
     }
 
     private fun configurarSpinner() {
@@ -95,5 +101,27 @@ class MainActivity : AppCompatActivity() {
             listaOfertas.add(oferta)
         }
         return listaOfertas
+    }
+
+    private fun filtrarOfertasPorCiudad(ciudad: String): List<Oferta> {
+        val resultado = if (ciudad == "Todas") {
+            ofertas
+        } else {
+            ofertas.filter {
+                it.ciudad == ciudad
+            }
+        }
+        return resultado
+    }
+
+    private fun mostrarResultado(ciudad: String, ofertasFiltradas: List<Oferta>) {
+        val numeroOfertas = ofertasFiltradas.size
+        val salarioTotal = ofertasFiltradas.sumOf { it.salario }
+        val salarioMedio = if (ofertasFiltradas.size > 0) {
+            ofertasFiltradas.map { it.salario }.average()
+        } else {
+            0.0
+        }
+        val salarioMaximo = ofertasFiltradas.maxOfOrNull { it.salario } ?: 0
     }
 }
