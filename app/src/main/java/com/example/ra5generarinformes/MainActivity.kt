@@ -148,5 +148,26 @@ class MainActivity : AppCompatActivity() {
             contenedorOfertas.addView(textoOferta)
         }
 
+        mostrarGrafico(ofertasFiltradas)
+    }
+
+    private fun mostrarGrafico(ofertasFiltradas: List<Oferta>) {
+        val ofertasValencia = ofertasFiltradas.count { it.ciudad == "Valencia" }
+        val ofertasMadrid = ofertasFiltradas.count { it.ciudad == "Madrid" }
+        val ofertasAlicante = ofertasFiltradas.count { it.ciudad == "Alicante" }
+
+        val valorMaximo = maxOf(ofertasValencia, ofertasMadrid, ofertasAlicante, 1)
+
+        barraValencia.max = valorMaximo
+        barraMadrid.max = valorMaximo
+        barraAlicante.max = valorMaximo
+
+        barraValencia.progress = ofertasValencia
+        barraMadrid.progress = ofertasMadrid
+        barraAlicante.progress = ofertasAlicante
+
+        textoCantidadValencia.text = ofertasValencia.toString()
+        textoCantidadMadrid.text = ofertasMadrid.toString()
+        textoCantidadAlicante.text = ofertasAlicante.toString()
     }
 }
