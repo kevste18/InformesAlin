@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var textoSalarioTotal: TextView
     private lateinit var textoSalarioMedio: TextView
     private lateinit var textoSalarioMaximo: TextView
+    private lateinit var textoSalarioMinimo: TextView
     private lateinit var barraValencia: ProgressBar
     private lateinit var barraMadrid: ProgressBar
     private lateinit var barraAlicante: ProgressBar
@@ -54,6 +55,7 @@ class MainActivity : AppCompatActivity() {
         textoSalarioTotal = findViewById(R.id.textoSalarioTotal)
         textoSalarioMedio = findViewById(R.id.textoSalarioMedio)
         textoSalarioMaximo = findViewById(R.id.textoSalarioMaximo)
+        textoSalarioMinimo = findViewById(R.id.textoSalarioMinimo)
         barraValencia = findViewById(R.id.barraValencia)
         barraMadrid = findViewById(R.id.barraMadrid)
         barraAlicante = findViewById(R.id.barraAlicante)
@@ -149,6 +151,7 @@ class MainActivity : AppCompatActivity() {
             0.0
         }
         val salarioMaximo = ofertasFiltradas.maxOfOrNull { it.salario } ?: 0
+        val salarioMinimo = ofertasFiltradas.minOfOrNull { it.salario } ?: 0
 
         contenedorOfertas.removeAllViews()
 
@@ -157,6 +160,7 @@ class MainActivity : AppCompatActivity() {
         textoSalarioTotal.text = "Salario total: ${formatearSalario(salarioTotal)}"
         textoSalarioMedio.text = "Salario medio: ${formatearSalario(salarioMedio.toInt())}"
         textoSalarioMaximo.text = "Salario maximo: ${formatearSalario(salarioMaximo)}"
+        textoSalarioMinimo.text = "Salario minimo: ${formatearSalario(salarioMinimo)}"
 
         ofertasFiltradas.forEachIndexed { indice, oferta ->
             val textoOferta = TextView(this)
